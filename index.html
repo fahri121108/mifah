@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💞 FAHRI ❤️ MIA - Cinta Abadi 💞</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { background: linear-gradient(180deg, #FFF0F5, #FFE6F2, #F8F0FF); min-height: 100vh; padding-bottom: 2rem; font-family: "Segoe UI", Roboto, sans-serif; }
+
+        /* ✅ ANIMASI RGB PASTI JALAN */
+        @keyframes rgbBerputar {
+            0% { border-color: #ff0000; box-shadow: 0 0 18px #ff0000, inset 0 0 6px rgba(255,0,0,0.15); }
+            17% { border-color: #ff9500; box-shadow: 0 0 18px #ff9500, inset 0 0 6px rgba(255,149,0,0.15); }
+            33% { border-color: #fff700; box-shadow: 0 0 18px #fff700, inset 0 0 6px rgba(255,247,0,0.15); }
+            50% { border-color: #00ff55; box-shadow: 0 0 18px #00ff55, inset 0 0 6px rgba(0,255,85,0.15); }
+            67% { border-color: #0099ff; box-shadow: 0 0 18px #0099ff, inset 0 0 6px rgba(0,153,255,0.15); }
+            83% { border-color: #a200ff; box-shadow: 0 0 18px #a200ff, inset 0 0 6px rgba(162,0,255,0.15); }
+            100% { border-color: #ff0000; box-shadow: 0 0 18px #ff0000, inset 0 0 6px rgba(255,0,0,0.15); }
+        }
+
+        /* ✅ KELAS BINGKAI RGB UNTUK SEMUA KOTAK */
+        .bingkai-rgb {
+            border: 4px solid #ff0000 !important;
+            border-radius: 20px !important;
+            animation: rgbBerputar 5s linear infinite !important;
+            background: rgba(255,255,255,0.95) !important;
+            backdrop-filter: blur(12px) !important;
+        }
+
+        /* Animasi lain */
+        @keyframes hatiDenyut {
+            0%,100% { transform: scale(1); }
+            30% { transform: scale(1.15); }
+            50% { transform: scale(1); }
+            70% { transform: scale(1.1); }
+        }
+        .animate-hati-denyut { animation: hatiDenyut 2s ease-in-out infinite; }
+        @keyframes munculPelan {
+            0% { opacity: 0; transform: translateY(50px) scale(0.85); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-muncul-pelan { animation: munculPelan 1.8s ease-out forwards; opacity: 0; }
+        @keyframes geserMasuk {
+            0% { opacity: 0; transform: translateX(-20px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        .animate-geser-masuk { animation: geserMasuk 0.5s ease-out forwards; }
+
+        /* Navigasi */
+        nav { position: sticky; top: 0; z-index: 40; margin: 12px; padding: 16px 24px; }
+        .nav-isi { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-link { display: none; gap: 24px; font-weight: 600; color: #333; }
+        .nav-link a:hover { color: #FF2E63; }
+        .btn-menu { font-size: 24px; border: none; background: none; cursor: pointer; }
+        .menu-hp { display: none; flex-direction: column; gap: 12px; margin-top: 16px; padding-bottom: 8px; }
+        .menu-hp a { padding: 8px 0; border-bottom: 1px solid #ffc8dd; color: #333; }
+        @media (min-width: 768px) {
+            .nav-link { display: flex; }
+            .btn-menu { display: none; }
+        }
+
+        /* Umum */
+        section { max-width: 1200px; margin: 0 auto; padding: 56px 16px; }
+        .judul-bagian { font-size: 2rem; font-weight: 700; text-align: center; color: #D90429; margin-bottom: 32px; }
+        .wadah-geser { display: flex; gap: 18px; overflow-x: auto; padding: 16px 0; scroll-snap-type: x mandatory; }
+        .wadah-geser::-webkit-scrollbar { height: 10px; border-radius: 5px; }
+        .wadah-geser::-webkit-scrollbar-thumb { background: linear-gradient(90deg, #FF2E63, #C77DFF); border-radius: 5px; }
+        .item-foto { scroll-snap-align: start; min-width: 300px; flex-shrink: 0; padding: 12px; }
+        .item-foto img { width: 100%; height: 250px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; }
+
+        /* Pesan */
+        .form-kirim { padding: 24px; margin-bottom: 24px; }
+        .info-balas { display: none; padding: 12px; background: #ffc8dd; border-radius: 12px; margin-bottom: 16px; justify-content: space-between; align-items: center; }
+        .info-balas.tampil { display: flex; }
+        .grup-input { margin-bottom: 16px; }
+        .grup-input label { display: block; font-weight: 600; margin-bottom: 6px; color: #444; }
+        .grup-input input, .grup-input textarea { width: 100%; padding: 12px; border: 2px solid #ffc8dd; border-radius: 12px; outline: none; font-size: 1rem; }
+        .grup-input input:focus, .grup-input textarea:focus { border-color: #FF2E63; box-shadow: 0 0 0 3px rgba(255,46,99,0.2); }
+        .btn-kirim { width: 100%; padding: 12px; background: #25D366; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s; }
+        .btn-kirim:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,211,102,0.3); }
+
+        /* Kotak Obrolan */
+        .kotak-obrolan { padding: 20px; min-height: 400px; max-height: 550px; overflow-y: auto; }
+        .kotak-obrolan::-webkit-scrollbar { width: 8px; }
+        .kotak-obrolan::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .judul-obrolan { font-weight: 700; font-size: 1.1rem; color: #D90429; padding-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.1); margin-bottom: 16px; }
+        .daftar-pesan { display: flex; flex-direction: column; gap: 12px; }
+        .pesan { max-width: 78%; padding: 12px; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+        .pesan.kamu { align-self: flex-end; background: #DCF8C6; border-radius: 16px 16px 4px 16px; }
+        .pesan.lain { align-self: flex-start; background: white; border-radius: 16px 16px 16px 4px; }
+        .nama-pengirim { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; color: #D90429; }
+        .waktu { font-size: 0.75rem; text-align: right; margin-top: 6px; color: #6B7280; }
+        .tombol-pesan { margin-top: 8px; font-size: 0.75rem; display: flex; gap: 16px; }
+        .balas-link { color: #2563eb; cursor: pointer; }
+        .hapus-link { color: #dc2626; cursor: pointer; }
+
+        /* Lainnya */
+        .tombol-atas { position: fixed; bottom: 32px; right: 32px; width: 56px; height: 56px; border-radius: 50%; background: #FF2E63; color: white; border: none; font-size: 20px; cursor: pointer; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 50; }
+        .tombol-atas.terlihat { opacity: 1; visibility: visible; }
+        footer { background: #D90429; color: white; padding: 32px; text-align: center; border-radius: 24px 24px 0 0; margin-top: 48px; }
+    </style>
+</head>
+<body>
+
+    <!-- Pembuka -->
+    <div id="layarPembuka" style="position:fixed;inset:0;z-index:99999;background:linear-gradient(160deg,#FFC8DD,#FFAFCC,#CDB4DB);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all 2s ease;">
+        <div class="animate-hati-denyut" style="font-size:96px;margin-bottom:32px;">❤️</div>
+        <h1 class="animate-muncul-pelan" style="font-size:clamp(2.5rem,5vw,4rem);font-weight:bold;color:#D90429;margin-bottom:24px;">FAHRI & MIA</h1>
+        <p class="animate-muncul-pelan" style="font-size:clamp(1.2rem,3vw,1.5rem);color:#D90429;margin-bottom:16px;animation-delay:1.2s;">Bersama Sejak 16 Juni 2024</p>
+        <p class="animate-muncul-pelan" style="color:#db2777;animation-delay:2.2s;">"Cinta kita tumbuh perlahan, abadi selamanya"</p>
+        <p class="animate-muncul-pelan" style="color:#db2777;animation-delay:3.2s;">"Aku selalu menjagamu, Fahri untuk Mia"</p>
+    </div>
+
+    <!-- Navigasi RGB -->
+    <nav class="bingkai-rgb">
+        <div class="nav-isi">
+            <a href="#beranda" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+                <span class="animate-hati-denyut" style="font-size:24px;">💞</span>
+                <span style="font-size:20px;font-weight:bold;color:#D90429;">Fahri & Mia</span>
+            </a>
+            <div class="nav-link">
+                <a href="#beranda" style="text-decoration:none;">Beranda</a>
+                <a href="#galeri" style="text-decoration:none;">Galeri</a>
+                <a href="#kenangan" style="text-decoration:none;">Kenangan</a>
+                <a href="#pesan" style="text-decoration:none;">Pesan</a>
+            </div>
+            <button id="bukaMenu" class="btn-menu"><i class="fa fa-bars"></i></button>
+        </div>
+        <div id="menuHp" class="menu-hp">
+            <a href="#beranda">Beranda</a>
+            <a href="#galeri">Galeri</a>
+            <a href="#kenangan">Kenangan</a>
+            <a href="#pesan">Pesan</a>
+        </div>
+    </nav>
+
+    <!-- Beranda -->
+    <section id="beranda">
+        <div style="display:flex;flex-direction:column;gap:48px;align-items:center;justify-content:center;">
+            <div class="animate-muncul-pelan">
+                <h2 style="font-size:clamp(1.8rem,4vw,2.2rem);font-weight:bold;color:#D90429;margin-bottom:24px;">Kita Sudah Bersama:</h2>
+                <div class="bingkai-rgb" style="padding:24px;margin-bottom:24px;">
+                    <p id="hitungHari" style="font-size:36px;font-weight:bold;text-align:center;color:#FF2E63;">0 Hari 💖</p>
+                    <p style="text-align:center;color:#666;margin-top:8px;">16 Juni 2024 sampai selamanya</p>
+                </div>
+                <p style="color:#444;line-height:1.7;margin-bottom:24px;">Halaman ini adalah bukti cinta Fahri untuk Mia, tersimpan abadi tanpa batas waktu.</p>
+                <div style="display:flex;flex-wrap:wrap;gap:16px;">
+                    <a href="#galeri" style="padding:12px 32px;background:#FF2E63;color:white;border-radius:999px;font-weight:bold;text-decoration:none;">Lihat Foto 📸</a>
+                    <a href="#pesan" class="bingkai-rgb" style="padding:12px 32px;color:#D90429;border-radius:999px;font-weight:bold;text-decoration:none;">Tulis Pesan 💌</a>
+                </div>
+            </div>
+            <div class="bingkai-rgb" style="padding:8px;border-radius:24px;overflow:hidden;">
+                <img src="contoh poto.jpg" alt="Foto Kita" style="width:100%;max-width:400px;border-radius:16px;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeri -->
+    <section id="galeri">
+        <h2 class="judul-bagian">📸 Galeri Spesial 📸</h2>
+        <div id="wadahGaleri" class="wadah-geser">
+            <p style="width:100%;text-align:center;color:#888;padding:40px;">Memuat foto...</p>
+        </div>
+    </section>
+
+    <!-- Kenangan -->
+    <section id="kenangan">
+        <h2 class="judul-bagian">💞 Kenangan Kita 💞</h2>
+        <div id="wadahKenangan" class="wadah-geser">
+            <p style="width:100%;text-align:center;color:#888;padding:40px;">Memuat kenangan...</p>
+        </div>
+    </section>
+
+    <!-- Pesan -->
+    <section id="pesan" style="max-width:700px;">
+        <h2 class="judul-bagian">💌 Pesan Cinta 💌</h2>
+
+        <!-- Form Kirim RGB -->
+        <div class="form-kirim bingkai-rgb">
+            <div id="infoBalas" class="info-balas">
+                <span>Membalas: <span id="namaBalas"></span></span>
+                <button id="batalBalas" style="border:none;background:none;color:#666;font-size:18px;cursor:pointer;"><i class="fa fa-times"></i></button>
+            </div>
+            <div class="grup-input">
+                <label>Nama Kamu (tersimpan otomatis)</label>
+                <input type="text" id="namaPengirim" placeholder="Contoh: Fahri / Mia">
+            </div>
+            <div class="grup-input">
+                <label>Tulis Pesanmu</label>
+                <textarea id="isiPesan" rows="2" placeholder="Ketik pesan cinta di sini..."></textarea>
+            </div>
+            <button id="tombolKirim" class="btn-kirim">Kirim Pesan 💖</button>
+        </div>
+
+        <!-- Kotak Obrolan RGB -->
+        <div class="kotak-obrolan bingkai-rgb">
+            <h3 class="judul-obrolan">💬 OBROLAN CHAT</h3>
+            <div id="daftarPesan" class="daftar-pesan">
+                <p style="width:100%;text-align:center;color:#888;padding:40px;">Belum ada pesan, jadilah yang pertama ✨</p>
+            </div>
+        </div>
+    </section>
+
+    <button id="tombolAtas" class="tombol-atas"><i class="fa fa-arrow-up"></i></button>
+
+    <footer>
+        <h3 style="font-size:20px;font-weight:bold;">💞 FAHRI & MIA - CINTA KITA TAKKAN PUDAR 💞</h3>
+        <p style="margin-top:12px;">Dibuat dengan sepenuh hati sejak 16 Juni 2024</p>
+    </footer>
+
+    <script>
+        // Tutup pembuka
+        setTimeout(() => document.getElementById('layarPembuka').style.opacity = '0', 6500);
+
+        // Hitung hari
+        const hariBersama = Math.floor((new Date() - new Date('2024-06-16')) / (1000*60*60*24));
+        document.getElementById('hitungHari').textContent = `${hariBersama} Hari Bersama 💖`;
+
+        // Firebase
+        const fbConfig = {
+            apiKey: "AIzaSyDuQmsUHotG-lW9tm5LKabUyw_ARwt_W2I",
+            authDomain: "fashion-fahri-39262.firebaseapp.com",
+            databaseURL: "https://fashion-fahri-39262-default-rtdb.firebaseio.com",
+            projectId: "fashion-fahri-39262",
+            storageBucket: "fashion-fahri-39262.firebasestorage.app",
+            messagingSenderId: "647011821518",
+            appId: "1:647011ff7821e75bf32d9f"
+        };
+        firebase.initializeApp(fbConfig);
+        const db = firebase.database();
+        const refPesan = db.ref('pesan_rapi');
+        const refFoto = db.ref('data_foto_rapi');
+        const BATAS_FOTO = 200;
+
+        // Cek file foto
+        async function cekFile(nama) {
+            return new Promise(res => {
+                const img = new Image();
+                img.onload = () => res(true);
+                img.onerror = () => res(false);
+                img.src = nama;
+            });
+        }
+
+        // Muat foto dengan bingkai RGB
+        async function muatSemuaFoto() {
+            const dataFb = (await refFoto.once('value')).val() || {};
+            const wadahGaleri = document.getElementById('wadahGaleri');
+            const wadahKenangan = document.getElementById('wadahKenangan');
+            wadahGaleri.innerHTML = ''; wadahKenangan.innerHTML = '';
+
+            for(let i=1; i<=BATAS_FOTO; i++) {
+                if(await cekFile(`poto${i}.jpg`)) {
+                    const d = dataFb[`poto${i}`] || { dilihat:0, suka:0 };
+                    wadahGaleri.innerHTML += `
+                    <div class="item-foto bingkai-rgb">
+                        <img src="poto${i}.jpg" alt="Foto ${i}">
+                        <h4 style="font-weight:bold;color:#D90429;margin-bottom:8px;">Foto ${i}</h4>
+                        <div style="display:flex;gap:20px;font-size:14px;color:#666;">
+                            <span><i class="fa fa-eye"></i> ${d.dilihat}</span>
+                            <span><i class="fa fa-heart" style="color:#ef4444;"></i> ${d.suka}</span>
+                        </div>
+                    </div>`;
+                    refFoto.child(`poto${i}/dilihat`).set(firebase.database.ServerValue.increment(1));
+                }
+                if(await cekFile(`kenangan${i}.jpg`)) {
+                    const d = dataFb[`kenangan${i}`] || { dilihat:0, suka:0 };
+                    wadahKenangan.innerHTML += `
+                    <div class="item-foto bingkai-rgb">
+                        <img src="kenangan${i}.jpg" alt="Kenangan ${i}">
+                        <h4 style="font-weight:bold;color:#D90429;margin-bottom:8px;">Kenangan ${i}</h4>
+                        <div style="display:flex;gap:20px;font-size:14px;color:#666;">
+                            <span><i class="fa fa-eye"></i> ${d.dilihat}</span>
+                            <span><i class="fa fa-heart" style="color:#ef4444;"></i> ${d.suka}</span>
+                        </div>
+                    </div>`;
+                    refFoto.child(`kenangan${i}/dilihat`).set(firebase.database.ServerValue.increment(1));
+                }
+            }
+        }
+        muatSemuaFoto();
+
+        // Nama tersimpan otomatis
+        const inputNama = document.getElementById('namaPengirim');
+        const namaSimpan = localStorage.getItem('namaKamu');
+        if(namaSimpan) inputNama.value = namaSimpan;
+        inputNama.addEventListener('change', () => localStorage.setItem('namaKamu', inputNama.value.trim()));
+
+        // Fitur pesan
+        let idBalas = null;
+        const infoBalas = document.getElementById('infoBalas');
+        document.getElementById('batalBalas').addEventListener('click', () => {
+            idBalas = null; infoBalas.classList.remove('tampil');
+        });
+
+        refPesan.on('value', snap => {
+            const wadah = document.getElementById('daftarPesan');
+            wadah.innerHTML = '';
+            const data = snap.val();
+            if(!data) {
+                wadah.innerHTML = '<p style="width:100%;text-align:center;color:#888;padding:40px;">Belum ada pesan, jadilah yang pertama ✨</p>';
+                return;
+            }
+            Object.entries(data).forEach(([id, psn]) => {
+                const waktu = new Date(psn.waktu).toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+                const kelas = psn.nama === namaSimpan ? 'pesan kamu' : 'pesan lain';
+                let balasTeks = '';
+                if(psn.balas) balasTeks = `<div style="padding:6px;background:rgba(0,0,0,0.05);border-left:3px solid #FF2E63;border-radius:6px;margin-bottom:8px;font-size:13px;color:#555;">Membalas ${psn.namaBalas}: ${psn.isiBalas}</div>`;
+                
+                wadah.innerHTML += `
+                <div class="${kelas} animate-geser-masuk">
+                    ${balasTeks}
+                    <div class="nama-pengirim">${psn.nama}</div>
+                    <div>${psn.isi}</div>
+                    <div class="waktu">${waktu}</div>
+                    <div class="tombol-pesan">
+                        <span class="balas-link" data-id="${id}" data-nama="${psn.nama}" data-teks="${psn.isi}"><i class="fa fa-reply"></i> Balas</span>
+                        <span class="hapus-link" data-id="${id}"><i class="fa fa-trash"></i> Hapus</span>
+                    </div>
+                </div>`;
+            });
+
+            // Tombol balas & hapus
+            document.querySelectorAll('.balas-link').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    idBalas = btn.dataset.id;
+                    document.getElementById('namaBalas').textContent = btn.dataset.nama;
+                    infoBalas.classList.add('tampil');
+                    document.getElementById('isiPesan').focus();
+                });
+            });
+            document.querySelectorAll('.hapus-link').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if(confirm('Yakin hapus pesan ini?')) refPesan.child(btn.dataset.id).remove();
+                });
+            });
+            wadah.scrollTop = wadah.scrollHeight;
+        });
+
+        // Kirim pesan
+        document.getElementById('tombolKirim').addEventListener('click', async () => {
+            const nama = inputNama.value.trim();
+            const isi = document.getElementById('isiPesan').value.trim();
+            if(!nama || !isi) return alert('Isi nama dan pesan dulu ya 😊');
+            const dataKirim = { nama, isi, waktu: Date.now() };
+            if(idBalas) {
+                dataKirim.balas = true;
+                dataKirim.namaBalas = document.querySelector(`[data-id="${idBalas}"] .nama-pengirim`)?.textContent || '';
+                dataKirim.isiBalas = document.querySelector(`[data-id="${idBalas}"] > div:nth-child(2)`)?.textContent || '';
+            }
+            await refPesan.push(dataKirim);
+            document.getElementById('isiPesan').value = '';
+            infoBalas.classList.remove('tampil');
+            idBalas = null;
+        });
+
+        // Tombol menu & atas
+        document.getElementById('bukaMenu').addEventListener('click', () => document.getElementById('menuHp').classList.toggle('hidden'));
+        const btnAtas = document.getElementById('tombolAtas');
+        window.addEventListener('scroll', () => btnAtas.classList.toggle('terlihat', window.scrollY > 400));
+        btnAtas.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+    </script>
+</body>
+</html>
